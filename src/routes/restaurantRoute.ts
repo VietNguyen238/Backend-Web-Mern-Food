@@ -1,5 +1,5 @@
 import express from "express";
-import { RestaurantController } from "../controllers/restaurantController";
+import { RestaurantController } from "../controllers/RestaurantController";
 import multer from "multer";
 import { jwtCheck, jwtParse } from "../middlewares/userMiddleware";
 import { validateRestaurantRequest } from "../middlewares/validation";

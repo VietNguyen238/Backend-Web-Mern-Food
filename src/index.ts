@@ -2,10 +2,12 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import "dotenv/config";
-import userRoute from "./routes/userRoute";
-import restaurantRoute from "./routes/restaurantRoute";
+import userRoute from "./routes/UserRoute";
+import restaurantRoute from "./routes/RestaurantRoute";
 import { v2 as cloudinary } from "cloudinary";
-import restaurantSearchRoute from "./routes/restaurantSearchRoute";
+import restaurantSearchRoute from "./routes/RestaurantSearchRoute";
+import orderRoute from "./routes/OrderRoute";
+
 const port = process.env.PORT || 4000;
 const uri = process.env.MONGODB_URI;
 const app = express();
@@ -28,6 +30,7 @@ app.get("/health", async (req: Request, res: Response) => {
 app.use("/api/user", userRoute);
 app.use("/api/restaurant", restaurantRoute);
 app.use("/api/v1/restaurant", restaurantSearchRoute);
+app.use("/api/order", orderRoute);
 
 app.listen(port, () => {
   console.log("listening on port " + port);
