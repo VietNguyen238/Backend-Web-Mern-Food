@@ -12,9 +12,10 @@ const port = process.env.PORT || 4000;
 const uri = process.env.MONGODB_URI;
 const app = express();
 
-app.use(express.json());
 app.use(cors());
 
+app.use("/api/order/checkout/webhook", express.raw({ type: "*/*" }));
+app.use(express.json());
 mongoose.connect(uri as string).then(() => console.log("Connected to MongoDB"));
 
 cloudinary.config({
