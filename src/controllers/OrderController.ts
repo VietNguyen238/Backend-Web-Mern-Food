@@ -68,6 +68,10 @@ export const OrderController = {
       res.status(500).json({ message: error.raw.message });
     }
   },
+  stripeWebhookHandler: async (req: Request, res: Response) => {
+    console.log("event: ", req.body);
+    res.send();
+  },
 };
 
 const createLineItems = (
