@@ -99,6 +99,16 @@ export const OrderController = {
 
     res.status(200).send();
   },
+  getMyOrder: async (req: Request, res: Response) => {
+    try {
+      const orders = await Order.find({ user: req.userId })
+        .populate("restaurant")
+        .populate("user");
+      res.json(orders);
+    } catch (error) {
+      res.status(500).json({ message: "something went wrong" });
+    }
+  },
 };
 
 const createLineItems = (
