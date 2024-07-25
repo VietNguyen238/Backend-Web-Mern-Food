@@ -1,6 +1,7 @@
 import Stripe from "stripe";
 import { Request, Response } from "express";
 import Restaurant, { MenuItemType } from "../models/restaurant";
+import Order from "../models/order";
 
 const STRIPE = new Stripe(process.env.STRIPE_API_KEY as string);
 const FRONTEND_URL = process.env.FRONTEND_URL as string;
@@ -33,6 +34,15 @@ export const OrderController = {
         throw new Error("Restaurant not found");
       }
 
+      const newOrder = new Order({
+        restaurant: restaurant,
+        user: req.userId,
+        status: "placed",
+        deliveryDetails: checkoutSessionRequest.deliveryDetails,
+        cartItems: checkoutSessionRequest.cartItems,
+        createAt: new Date(),
+      });
+
       const lineItems = createLineItems(
         checkoutSessionRequest,
         restaurant.menuItems
@@ -40,7 +50,7 @@ export const OrderController = {
 
       const session = await createSession(
         lineItems,
-        "TEST_ORDER_ID",
+        newOrder._id.toString(),
         restaurant.deliveryPrice,
         restaurant._id.toString()
       );
@@ -51,6 +61,7 @@ export const OrderController = {
           .json({ message: "Error creating stripe session" });
       }
 
+      await newOrder.save();
       res.json({ url: session.url });
     } catch (error: any) {
       console.log(error);
